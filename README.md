@@ -7,6 +7,10 @@
 ### Example
 [http://cmiscm.github.com/preyon/](http://cmiscm.github.com/preyon/)
 
+ 
+### How to
+[http://blog.cmiscm.com/?p=5325](http://blog.cmiscm.com/?p=5325)
+
 ### Questions
 If you have any questions, please feel free to ask on [my blog](http://blog.cmiscm.com/?p=5325)
 
