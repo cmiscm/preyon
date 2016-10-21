@@ -176,7 +176,7 @@ var Preyon = Preyon || (function () {
             var labelCon = new CMControl.Panel();
             container.add(labelCon);
             item = new CMControl.Panel();
-            item.setHTMLContent('<a href="http://blog.cmiscm.com/?p=5325">BLOG.CMISCM.COM</a>');
+            item.setHTMLContent('<a href="http://blog.cmiscm.com/?p=5325" target="_blank">BLOG.CMISCM.COM</a>');
             item.setClass('link');
             labelCon.add(item);
 
