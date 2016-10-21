@@ -237,23 +237,29 @@ var Preyon = Preyon || (function () {
             _points.c1 = getCurrent(_guide.y, _open.c1, _close.c1);
             _points.c2 = getCurrent(_guide.y, _open.c2, _close.c2);
 
-            var i, point;
+            var i, point, no;
 
             if (_isPoint) {
                 drawMouthPoint();
 
                 for (i=1; i<_teethTotal; i++) {
-                    point = getPointOnQuad({x:0, y:_points.y1}, {x:_cx, y:_points.c1}, {x:_sw, y:_points.y1}, i / _teethTotal);
-                    if (i % 2) drawToothPoint(point, 1);
-                    point = getPointOnQuad({x:0, y:_points.y2}, {x:_cx, y:_points.c2}, {x:_sw, y:_points.y2}, i / _teethTotal);
-                    if (i % 2 == 0) drawToothPoint(point, 0);
+                    no = i % 2;
+                    if (no == 1) {
+                        point = getPointOnQuad({x:0, y:_points.y1}, {x:_cx, y:_points.c1}, {x:_sw, y:_points.y1}, i / _teethTotal);
+                    } else {
+                        point = getPointOnQuad({x:0, y:_points.y2}, {x:_cx, y:_points.c2}, {x:_sw, y:_points.y2}, i / _teethTotal);
+                    }
+                    drawToothPoint(point, no);
                 }
             } else {
                 for (i=1; i<_teethTotal; i++) {
-                    point = getPointOnQuad({x:0, y:_points.y1}, {x:_cx, y:_points.c1}, {x:_sw, y:_points.y1}, i / _teethTotal);
-                    if (i % 2) drawTooth(point, 1);
-                    point = getPointOnQuad({x:0, y:_points.y2}, {x:_cx, y:_points.c2}, {x:_sw, y:_points.y2}, i / _teethTotal);
-                    if (i % 2 == 0) drawTooth(point, 0);
+                    no = i % 2;
+                    if (no == 1) {
+                        point = getPointOnQuad({x:0, y:_points.y1}, {x:_cx, y:_points.c1}, {x:_sw, y:_points.y1}, i / _teethTotal);
+                    } else {
+                        point = getPointOnQuad({x:0, y:_points.y2}, {x:_cx, y:_points.c2}, {x:_sw, y:_points.y2}, i / _teethTotal);
+                    }
+                    drawTooth(point, no);
                 }
 
                 drawMouth();
@@ -307,7 +313,6 @@ var Preyon = Preyon || (function () {
             _ctx.lineTo(tx + _toothW2, ty);
             _ctx.lineTo(tx, ty + toothH);
             _ctx.lineTo(tx - _toothW2, ty);
-            _ctx.lineTo(tx, ty);
             _ctx.closePath();
             _ctx.fill();
 
@@ -317,7 +322,6 @@ var Preyon = Preyon || (function () {
             _ctx.moveTo(tx3, ty);
             _ctx.lineTo(tx + _toothW2, ty);
             _ctx.lineTo(tx, ty + toothH);
-            _ctx.lineTo(tx3, ty);
             _ctx.closePath();
             _ctx.fill();
         }
@@ -358,13 +362,13 @@ var Preyon = Preyon || (function () {
         }
 
         /*
-         Get point on curved line
-         @p1: start point
-         @p2: control point
-         @p3: end point
-         @p: p = 0 is the start of the curve, p = 0.5 is middle and p = 1 is end
+         * Get point on curved line
+         * p1: start point
+         * p2: control point
+         * p3: end point
+         * p: p = 0 is the start of the curve, p = 0.5 is middle and p = 1 is end
          */
-        function getPointOnQuad(p1, p2, p3, p){
+        function getPointOnQuad(p1, p2, p3, p) {
             var x1 = (p2.x - p1.x) * p + p1.x,
                 y1 = (p2.y - p1.y) * p + p1.y,
                 x2 = (p3.x - p2.x) * p + p2.x,
