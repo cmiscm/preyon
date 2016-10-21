@@ -198,9 +198,9 @@ var Preyon = Preyon || (function () {
             _cx = _sw >> 1;
             _cy = _sh >> 1;
 
-            _close = {y1:_cy, y2:_cy, c:0};
-            _open = {y1:0, y2:_sh, c:_cy};
-            _points = {y1:0, y2:_sh, c:_cy};
+            _close = {y1:_cy, y2:_cy, c1:_cy, c2:_cy};
+            _open = {y1:0, y2:_sh, c1:-_cy, c2:_sh + _cy};
+            _points = {y1:0, y2:_sh, c1:-_cy, c2:_sh + _cy};
 
             $canvas.width = _sw;
             $canvas.height = _sh;
@@ -234,34 +234,33 @@ var Preyon = Preyon || (function () {
 
             _points.y1 = getCurrent(_guide.y, _open.y1, _close.y1);
             _points.y2 = getCurrent(_guide.y, _open.y2, _close.y2);
-            _points.c = getCurrent(_guide.y, _open.c, _close.c);
+            _points.c1 = getCurrent(_guide.y, _open.c1, _close.c1);
+            _points.c2 = getCurrent(_guide.y, _open.c2, _close.c2);
 
-            var p1 = _points.y1 - _points.c,
-                p2 = _points.y2 + _points.c,
-                i, point;
+            var i, point;
 
             if (_isPoint) {
-                drawMouthPoint(p1, p2);
+                drawMouthPoint();
 
                 for (i=1; i<_teethTotal; i++) {
-                    point = getPointOnQuad({x:0, y:_points.y1}, {x:_cx, y:p1}, {x:_sw, y:_points.y1}, i / _teethTotal);
+                    point = getPointOnQuad({x:0, y:_points.y1}, {x:_cx, y:_points.c1}, {x:_sw, y:_points.y1}, i / _teethTotal);
                     if (i % 2) drawToothPoint(point, 1);
-                    point = getPointOnQuad({x:0, y:_points.y2}, {x:_cx, y:p2}, {x:_sw, y:_points.y2}, i / _teethTotal);
+                    point = getPointOnQuad({x:0, y:_points.y2}, {x:_cx, y:_points.c2}, {x:_sw, y:_points.y2}, i / _teethTotal);
                     if (i % 2 == 0) drawToothPoint(point, 0);
                 }
             } else {
                 for (i=1; i<_teethTotal; i++) {
-                    point = getPointOnQuad({x:0, y:_points.y1}, {x:_cx, y:p1}, {x:_sw, y:_points.y1}, i / _teethTotal);
+                    point = getPointOnQuad({x:0, y:_points.y1}, {x:_cx, y:_points.c1}, {x:_sw, y:_points.y1}, i / _teethTotal);
                     if (i % 2) drawTooth(point, 1);
-                    point = getPointOnQuad({x:0, y:_points.y2}, {x:_cx, y:p2}, {x:_sw, y:_points.y2}, i / _teethTotal);
+                    point = getPointOnQuad({x:0, y:_points.y2}, {x:_cx, y:_points.c2}, {x:_sw, y:_points.y2}, i / _teethTotal);
                     if (i % 2 == 0) drawTooth(point, 0);
                 }
 
-                drawMouth(p1, p2);
+                drawMouth();
             }
         }
 
-        function drawMouth(p1, p2) {
+        function drawMouth() {
             if (_isPoint) {
                 _ctx.fillStyle = 'transparent';
                 _ctx.strokeStyle = '#fff';
@@ -276,7 +275,7 @@ var Preyon = Preyon || (function () {
             _ctx.moveTo(0, 0);
             _ctx.lineTo(_sw, 0);
             _ctx.lineTo(_sw, _points.y1);
-            _ctx.quadraticCurveTo(_cx, p1, 0, _points.y1);
+            _ctx.quadraticCurveTo(_cx, _points.c1, 0, _points.y1);
             _ctx.lineTo(0, 0);
             _ctx.closePath();
             _ctx.fill();
@@ -285,7 +284,7 @@ var Preyon = Preyon || (function () {
             _ctx.moveTo(0, _sh);
             _ctx.lineTo(_sw, _sh);
             _ctx.lineTo(_sw, _points.y2);
-            _ctx.quadraticCurveTo(_cx, p2, 0, _points.y2);
+            _ctx.quadraticCurveTo(_cx, _points.c2, 0, _points.y2);
             _ctx.lineTo(0, _sh);
             _ctx.closePath();
             _ctx.fill();
@@ -323,7 +322,7 @@ var Preyon = Preyon || (function () {
             _ctx.fill();
         }
 
-        function drawMouthPoint(p1, p2) {
+        function drawMouthPoint() {
             _ctx.fillStyle = 'transparent';
             _ctx.strokeStyle = '#fff';
             _ctx.lineWidth = 2;
@@ -332,7 +331,7 @@ var Preyon = Preyon || (function () {
             _ctx.moveTo(0, 0);
             _ctx.lineTo(_sw, 0);
             _ctx.lineTo(_sw, _points.y1);
-            _ctx.quadraticCurveTo(_cx, p1, 0, _points.y1);
+            _ctx.quadraticCurveTo(_cx, _points.c1, 0, _points.y1);
             _ctx.lineTo(0, 0);
             _ctx.closePath();
             _ctx.stroke();
@@ -341,7 +340,7 @@ var Preyon = Preyon || (function () {
             _ctx.moveTo(0, _sh);
             _ctx.lineTo(_sw, _sh);
             _ctx.lineTo(_sw, _points.y2);
-            _ctx.quadraticCurveTo(_cx, p2, 0, _points.y2);
+            _ctx.quadraticCurveTo(_cx, _points.c2, 0, _points.y2);
             _ctx.lineTo(0, _sh);
             _ctx.closePath();
             _ctx.stroke();
