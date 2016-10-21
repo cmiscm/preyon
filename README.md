@@ -1,5 +1,4 @@
 #Prey on Animation
-============
 
 
 [![alt text](https://cmiscm.github.io/preyon/screenshot/mon.gif)](http://cmiscm.github.com/preyon/)
